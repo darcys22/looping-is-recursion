@@ -42,14 +42,12 @@
      (recur f (rest seq) (inc i)))))
 
 (defn avg [a-seq]
-  (loop [av 0
-         acc 1
+  (loop [n 0,
+         total 0,
          seq a-seq]
-    (cond
-     (empty? seq)
-       (/ av acc)
-     :else
-       (recur (+ av (first a-seq)) (inc acc) (rest a-seq)))))
+    (if (empty? seq)
+      (/ total n)
+      (recur (inc n) (+ total (first seq)) (rest seq)))))
 
 (defn toggle [a-set elem]
   (if (contains? a-set elem)
@@ -57,11 +55,11 @@
     (conj a-set elem)))
 
 (defn parity [a-seq]
-  (loop [ret #{}
-         seq a-seq]
-    (if (empty? a-seq)
+  (loop [ret #{},
+         sea a-seq]
+    (if (empty? sea)
       ret
-      (recur (toggle ret (first seq)) (rest seq)))))
+      (recur (toggle ret (first sea)) (rest sea)))))
 
 (defn fast-fibo [n]
   (cond
@@ -69,15 +67,16 @@
    :else
      (loop [prev 0
          xprev 1
-         i 2
+         i 1
          aim n]
        (if (= i aim)
          (+ prev xprev)
-         (recur prev (+ prev xprev) (inc i) aim)))))
+         (recur (+ prev xprev) prev (inc i) aim)))))
 
 (defn cut-at-repetition [a-seq]
-  (loop [ret []
-         seq a-seq]
-    (if (or (contains? ret (first a-seq)) (empty? a-seq))
-      ret
-      (recur (conj ret (first a-seq)) (rest a-seq)))))
+  (loop [ret #{}
+         uniq []
+         sea a-seq]
+    (if (or (contains? ret (first sea)) (empty? sea))
+      uniq
+      (recur (conj ret (first sea)) (conj uniq (first sea)) (rest sea)))))
